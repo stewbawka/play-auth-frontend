@@ -2,7 +2,7 @@ module.exports = {
   devServer: {
     host: "localhost",
     disableHostCheck: true,
-    port: 8080,
+    port: 8081,
   },
   configureWebpack: {
     devServer: {
