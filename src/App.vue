@@ -2,14 +2,18 @@
   <Login />
 </template>
 
-<script>
-import Login from './pages/Login.vue'
+<script lang="ts">
+import Login from './pages/Login.vue';
+import { createStore } from './store';
 
 export default {
   name: 'App',
+  setup() {
+    createStore();
+  },
   components: {
     Login
-  }
+  },
 }
 </script>
 

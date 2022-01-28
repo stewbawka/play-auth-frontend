@@ -4,7 +4,6 @@ import VueAxios from 'vue-axios';
 import singleSpaVue from 'single-spa-vue';
 
 import App from './App.vue';
-import store from './store';
 import config from './config';
 
 
@@ -25,10 +24,8 @@ const vueLifecycles = singleSpaVue({
     },
   },
   handleInstance: (app) => {
-    app.use(store);
     app.use(VueAxios, axios);
     app.axios.defaults.baseURL = config.apiBaseUrl;
-    app.axios.defaults.withCredentials = true;
   }
 });
 

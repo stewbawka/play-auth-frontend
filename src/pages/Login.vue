@@ -1,17 +1,12 @@
-<script>
-import { computed } from 'vue';
-import { useStore } from "vuex";
+<script lang="ts">
+import { defineComponent } from "vue";
+import { useStore } from '@/store';
 
-export default {
+export default defineComponent({
   name: "Login",
   setup() {
-    const store = useStore();
-    let token = computed(function() {
-      return store.state.token;
-    });
-    return {
-      token
-    }
+    const { session, setSessionToken } = useStore();
+    return { session, setSessionToken };
   },
   data() {
     return {
@@ -20,19 +15,29 @@ export default {
     }
   },
   methods: {
-    async requestLogin(e) {
+    async requestLogin(e : any) {
       e.preventDefault();
       const json = JSON.stringify({ email: this.email, password: this.password });
-      const res = await this.axios.post("/tokens", json);
-      console.log(res);
+      const config = {
+        withCredentials: true
+      }
+      if (this.setSessionToken) {
+        const res = await this.axios.post("/tokens", json, config);
+        this.setSessionToken(res.data.data.token);
+      }
     },
-    async requestUsers(e) {
+    async requestUsers(e : any) {
       e.preventDefault();
-      const res = await this.axios.get("/users");
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${this.session?.token}`,
+        },
+      }
+      const res = await this.axios.get("/users", config);
       console.log(res);
     },
   },
-}
+});
 </script>
 
 <template>
@@ -48,7 +53,7 @@ export default {
     </label>
     <div>
       <button class="my-4 px-4 py-2 border-2 border-black rounded-lg text-white bg-blue-900">
-        Login
+        Login {{ session?.token }}
       </button>
     </div>
   </form>
