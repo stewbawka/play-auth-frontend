@@ -1,10 +1,17 @@
 import { Ref } from 'vue';
+export interface User {
+  id?: int;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+}
 export interface Session {
   token?: string;
+  user?: User;
 }
 
 export interface Store {
   session?: Ref<Session>; 
-  setSessionToken?: (string) => void;
+  setSession?: (string, User) => void;
 }
 

@@ -1,12 +1,15 @@
 <script lang="ts">
 import { defineComponent } from "vue";
+
+import router from "@/router";
 import { useStore } from '@/store';
+import { User } from '@/types';
 
 export default defineComponent({
   name: "Login",
   setup() {
-    const { session, setSessionToken } = useStore();
-    return { session, setSessionToken };
+    const { session, setSession } = useStore();
+    return { session, setSession };
   },
   data() {
     return {
@@ -21,9 +24,13 @@ export default defineComponent({
       const config = {
         withCredentials: true
       }
-      if (this.setSessionToken) {
+      if (this.setSession) {
         const res = await this.axios.post("/tokens", json, config);
-        this.setSessionToken(res.data.data.token);
+        const user: User = {
+          firstName: res.data.data.user.first_name
+        };
+        this.setSession(res.data.data.token, user);
+				router.push("/me");
       }
     },
     async requestUsers(e : any) {

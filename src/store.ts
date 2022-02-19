@@ -1,29 +1,31 @@
 import { reactive, readonly, provide, inject, InjectionKey, Ref, ref } from 'vue';
-import { Session, Store } from '@/types';
+import { Session, Store, User } from '@/types';
 
 const SessionKey: InjectionKey<Ref<Session>> = Symbol('Session');
-const SetSessionTokenKey: InjectionKey<(s: string) => void> = Symbol('SetSessionToken');
+const SetSessionKey: InjectionKey<(s: string) => void> = Symbol('SetSession');
 
 export const createStore = () => {
   const s: Session = {
-    token: 'testing'
+    token: undefined,
+    user: undefined
   };
   const session = ref(s);
-  const setSessionToken = (newToken: string) => {
+  const setSession = (newToken: string, user: User) => {
     const newSession: Session = {
       token: newToken,
+      user: user,
     };
     session.value = newSession;
 
   };
   provide(SessionKey, ref(session));
-  provide(SetSessionTokenKey, setSessionToken);
+  provide(SetSessionKey, setSession);
 }
 
 export const useStore = () => {
   const store: Store = {
     session: inject(SessionKey),
-    setSessionToken: inject(SetSessionTokenKey),
+    setSession: inject(SetSessionKey),
   };
   return store;
 }

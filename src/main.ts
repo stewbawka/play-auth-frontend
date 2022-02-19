@@ -3,6 +3,7 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import singleSpaVue from 'single-spa-vue';
 
+import router from './router';
 import App from './App.vue';
 import config from './config';
 
@@ -22,10 +23,13 @@ const vueLifecycles = singleSpaVue({
         */
       });
     },
+    router,
   },
   handleInstance: (app) => {
+    app.use(router);
     app.use(VueAxios, axios);
     app.axios.defaults.baseURL = config.apiBaseUrl;
+    app.provide('axios', app.config.globalProperties.axios) 
   }
 });
 
