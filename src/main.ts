@@ -6,6 +6,7 @@ import singleSpaVue from 'single-spa-vue';
 import router from './router';
 import App from './App.vue';
 import config from './config';
+import { emitter } from '@/store';
 
 
 const vueLifecycles = singleSpaVue({
@@ -36,3 +37,5 @@ const vueLifecycles = singleSpaVue({
 export const bootstrap = vueLifecycles.bootstrap;
 export const mount = vueLifecycles.mount;
 export const unmount = vueLifecycles.unmount;
+export { emitter };
+

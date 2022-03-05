@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
+    "mitt": "^3.0.0",
     "single-spa-vue": "^2.1.0",
     "vue": "^3.0.0",
     "vue-axios": "^3.4.0",

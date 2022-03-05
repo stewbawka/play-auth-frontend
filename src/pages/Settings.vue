@@ -36,7 +36,6 @@ export default defineComponent({
 
       if (session && session.value.user) {
         const userId = session.value.user.id;
-        console.log(userId);
         const config = {
           headers: {
             'Authorization': `Bearer ${session.value.token}`,

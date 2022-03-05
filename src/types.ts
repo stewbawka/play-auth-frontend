@@ -13,5 +13,5 @@ export interface Session {
 export interface Store {
   session?: Ref<Session>; 
   setSession?: (string, User) => void;
+  clearSession?: () => void;
 }
-
