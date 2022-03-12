@@ -45,10 +45,8 @@ export default defineComponent({
           first_name: data.value.firstName,
           last_name: data.value.lastName,
         };
-        const res = await axios.patch(`/users/${userId}`, payload, config);
-
-        console.log(res);
-        console.log(data.value);
+        // TODO: check response
+        await axios.patch(`/users/${userId}`, payload, config);
       }
     }
      

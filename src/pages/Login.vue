@@ -33,16 +33,6 @@ export default defineComponent({
 				router.push("/me");
       }
     },
-    async requestUsers(e : any) {
-      e.preventDefault();
-      const config = {
-        headers: {
-          'Authorization': `Bearer ${this.session?.token}`,
-        },
-      }
-      const res = await this.axios.get("/users", config);
-      console.log(res);
-    },
   },
 });
 </script>
@@ -64,8 +54,5 @@ export default defineComponent({
       </button>
     </div>
   </form>
-  <button class="my-4 px-4 py-2 border-2 border-black rounded-lg text-white bg-blue-900" v-on:click="requestUsers">
-    Fetch User
-  </button>
 </div>
 </template>
