@@ -1,45 +1,39 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, reactive, toRefs } from "vue";
+import { useApi } from "@/modules/api";
+import { useAuth } from "@/modules/auth";
 
-import router from "@/router";
-import { useStore } from '@/store';
-import { User } from '@/types';
+interface LoginPayload {
+  email: string;
+  password: string;
+}
 
 export default defineComponent({
   name: "Login",
   setup() {
-    const { session, setSession } = useStore();
-    return { session, setSession };
-  },
-  data() {
-    return {
-      email: "",
-      password: "",
-    }
-  },
-  methods: {
-    async requestLogin(e : any) {
-      e.preventDefault();
-      const json = JSON.stringify({ email: this.email, password: this.password });
-      const config = {
-        withCredentials: true
-      }
-      if (this.setSession) {
-        const res = await this.axios.post("/tokens", json, config);
-        const user: User = {
-          firstName: res.data.data.user.first_name
-        };
-        this.setSession(res.data.data.token, user);
-				router.push("/me");
-      }
-    },
+    console.log('loginsetup');
+    const { loading, data, post } = useApi("/tokens");
+    const payload = reactive<LoginPayload>({
+      email: "login@host.com",
+      password: "test12345",
+    });
+
+    const submit = async () => {
+      await post(payload)
+      const { setUser } = useAuth();
+      console.log('aftersubmit');
+      console.log(data.value)
+      setUser(data.value);
+    };
+    return { loading, submit, ...toRefs(payload) };
+
   },
 });
 </script>
 
 <template>
 <div class="flex justify-center bg-gray-300 pt-8">
-  <form class="grid grid-cols-1 gap-6" @submit="requestLogin" novalidate>
+  <form class="grid grid-cols-1 gap-6" @submit.prevent="submit" novalidate>
     <label class="block">
       <span class="text-gray-700">Email</span>
       <input type="email" class="control" v-model="email" />
@@ -50,7 +44,7 @@ export default defineComponent({
     </label>
     <div>
       <button class="my-4 px-4 py-2 border-2 border-black rounded-lg text-white bg-blue-900">
-        Login {{ session?.token }}
+        Login
       </button>
     </div>
   </form>

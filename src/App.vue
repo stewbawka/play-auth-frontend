@@ -1,14 +1,28 @@
 <template>
-  <router-view />
+  <p>user: {{ user?.email }}</p>
+  <template v-if="isAuthenticating">
+    <p>Authenticating...</p>
+  </template>
+  <template v-else>
+    <router-view />
+  </template>
 </template>
 
 <script lang="ts">
-import { createStore } from './store';
+import { watch } from 'vue'
+import { useAuth } from "@/modules/auth";
 
 export default {
   name: 'App',
   setup() {
-    createStore();
+    const { isAuthenticating, user } = useAuth();
+
+    watch([ user ], () => {
+      console.log('app watch');
+      console.log(user);
+    });
+
+    return { user, isAuthenticating };
   },
 }
 </script>

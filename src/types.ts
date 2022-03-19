@@ -1,4 +1,3 @@
-import { Ref } from 'vue';
 export interface User {
   id?: int;
   email?: string;
@@ -11,7 +10,7 @@ export interface Session {
 }
 
 export interface Store {
-  session?: Ref<Session>; 
+  session?: Session; 
   setSession?: (string, User) => void;
   clearSession?: () => void;
 }

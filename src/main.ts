@@ -1,12 +1,10 @@
 import { createApp, h } from 'vue';
-import axios from 'axios';
-import VueAxios from 'vue-axios';
 import singleSpaVue from 'single-spa-vue';
 
 import router from './router';
 import App from './App.vue';
 import config from './config';
-import { emitter } from '@/store';
+import { authEmitter } from '@/modules/auth';
 
 
 const vueLifecycles = singleSpaVue({
@@ -28,14 +26,11 @@ const vueLifecycles = singleSpaVue({
   },
   handleInstance: (app) => {
     app.use(router);
-    app.use(VueAxios, axios);
-    app.axios.defaults.baseURL = config.apiBaseUrl;
-    app.provide('axios', app.config.globalProperties.axios) 
   }
 });
 
 export const bootstrap = vueLifecycles.bootstrap;
 export const mount = vueLifecycles.mount;
 export const unmount = vueLifecycles.unmount;
-export { emitter };
+export { authEmitter as emitter };
 
