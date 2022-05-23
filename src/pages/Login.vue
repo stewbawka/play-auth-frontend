@@ -11,8 +11,10 @@ interface LoginPayload {
 export default defineComponent({
   name: "Login",
   setup() {
-    console.log('loginsetup');
-    const { loading, data, post } = useApi("/tokens");
+		const config = {
+			withCredentials: true
+		}
+    const { loading, data, post } = useApi("/tokens", config);
     const payload = reactive<LoginPayload>({
       email: "login@host.com",
       password: "test12345",
@@ -21,9 +23,7 @@ export default defineComponent({
     const submit = async () => {
       await post(payload)
       const { setUser } = useAuth();
-      console.log('aftersubmit');
-      console.log(data.value)
-      setUser(data.value);
+      setUser(data.value.token, data.value.user);
     };
     return { loading, submit, ...toRefs(payload) };
 

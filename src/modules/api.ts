@@ -1,21 +1,29 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import humps from 'humps';
 import { ref } from 'vue';
-import config from '@/config';
+import { default as appConfig } from '@/config';
 
-export const useApi = (path: string) => {
+export const useApi = (path: string, config?: AxiosRequestConfig) => {
+  
   const api = axios.create({
-    baseURL: config.apiBaseUrl,
+    baseURL: appConfig.apiBaseUrl,
+    ...config,
   });
 
   const data = ref();
   const loading = ref(false);
+  const error = ref();
 
   const get = (config?: AxiosRequestConfig) => {
     loading.value = true;
+    error.value = undefined;
 
     return api.get(path, config)
       .then(res => data.value = humps.camelizeKeys(res.data.data))
+      .catch(e => {
+        error.value = e;
+        throw e;
+      })
       .finally(() => loading.value = false);
   };
 
@@ -27,6 +35,6 @@ export const useApi = (path: string) => {
       .finally(() => loading.value = false);
   };
 
-  return { loading, data, get, post };
+  return { loading, data, error, get, post };
 
 }
