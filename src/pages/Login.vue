@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "vue";
+import { defineComponent, reactive, toRefs, watch } from "vue";
+import router from "@/router";
 import { useApi } from "@/modules/api";
 import { useAuth } from "@/modules/auth";
 
@@ -20,10 +21,15 @@ export default defineComponent({
       password: "test12345",
     });
 
-    const submit = async () => {
-      await post(payload)
+    watch([ data ], () => {
+      console.log('login response');
       const { setUser } = useAuth();
       setUser(data.value.token, data.value.user);
+      router.push({ name: 'settings' });
+    });
+
+    const submit = async () => {
+      await post(payload)
     };
     return { loading, submit, ...toRefs(payload) };
 

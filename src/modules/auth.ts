@@ -33,8 +33,16 @@ export const useAuth = () => {
     authEmitter.emit('authStateUpdated', toRefs(state));
   };
 
+  const clearUser = (): void => {
+    state.user = undefined;
+    state.token = undefined;
+    window.localStorage.removeItem(IS_LOGGED_IN_KEY);
+    authEmitter.emit('authStateUpdated', toRefs(state));
+  };
+
   return {
     setUser,
+    clearUser,
     ...toRefs(state),
   };
 };
