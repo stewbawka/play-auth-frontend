@@ -35,6 +35,15 @@ export const useApi = (path: string, config?: AxiosRequestConfig) => {
       .finally(() => loading.value = false);
   };
 
-  return { loading, data, error, get, post };
+  const patch = (payload?: Record<string, any>, config?: AxiosRequestConfig) => {
+    loading.value = true;
+
+    return api.patch(path, humps.decamelizeKeys(payload || {}), config)
+      .then(res => data.value = humps.camelizeKeys(res.data.data))
+      .finally(() => loading.value = false);
+  };
+
+
+  return { loading, data, error, get, patch, post };
 
 }

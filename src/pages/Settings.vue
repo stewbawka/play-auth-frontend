@@ -13,14 +13,15 @@ export default defineComponent({
   name: "Settings",
   setup() {
     const { user } = useAuth();
-    const { loading, data } = useApi("/tokens");
+    const userId = user?.value?.id;
+    const { loading, data, patch } = useApi(`/users/${userId}`);
     const payload = reactive<SettingsUpdatePayload>({
       email: user?.value?.email || "",
       firstName: user?.value?.firstName || "",
       lastName: user?.value?.lastName || "",
     });
     const submit = async () => {
-      console.log(data);
+      patch(payload);
     };
 
     watch([ data ], () => {
