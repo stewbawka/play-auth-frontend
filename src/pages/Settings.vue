@@ -12,9 +12,12 @@ interface SettingsUpdatePayload {
 export default defineComponent({
   name: "Settings",
   setup() {
-    const { user } = useAuth();
+    const { user, token } = useAuth();
     const userId = user?.value?.id;
-    const { loading, data, patch } = useApi(`/users/${userId}`);
+    const config = {
+      headers: { 'Authorization': `Bearer ${token?.value}` }
+    };
+    const { loading, data, patch } = useApi(`/users/${userId}`, config);
     const payload = reactive<SettingsUpdatePayload>({
       email: user?.value?.email || "",
       firstName: user?.value?.firstName || "",
